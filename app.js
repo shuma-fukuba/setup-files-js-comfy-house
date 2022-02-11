@@ -103,6 +103,9 @@ class Storage {
     static saveCart(cart) {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
+    static getCart(){
+      return localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')):[];
+    }
 }
 document.addEventListener('DOMContentLoaded', () => {
     const ui = new UI();
@@ -111,5 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.displayProducts(products);
         Storage.saveProducts(products);
     }).then(() => {
+      
     });
 });
