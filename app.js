@@ -77,6 +77,7 @@ class UI {
             }
         });
     }
+
     setCartValues(cart) {
         let tempTotal = 0;
         let itemsTotal = 0;
@@ -86,7 +87,13 @@ class UI {
         })
         cartTotal.innerText = parseFloat(tempTotal.toFixed(2));
         cartItems.innerText  =itemsTotal;
-    };
+    }
+
+    showCart() {
+        cartOverlay.classList.add('transparentBcg');
+        cartDOM.classList.add('showCart');
+        
+    }
 }
 
 
