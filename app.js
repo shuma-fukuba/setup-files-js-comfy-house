@@ -89,10 +89,29 @@ class UI {
         cartItems.innerText  =itemsTotal;
     }
 
+    populateCart(cart) {
+        for (var i = 0; i < cart.length; i++) {
+            this.addCartitem(cart[i]);
+        }
+    }
+
+    setupAPP() {
+        cart = Storage.getCart();
+        this.setCartValues(cart);
+        this.populateCart(cart);
+        cartBtn.addEventListener('click', this.showCart);
+        closeCartBtn.addEventListener('click', this.hideCart);
+    }
+
     showCart() {
         cartOverlay.classList.add('transparentBcg');
         cartDOM.classList.add('showCart');
-        
+
+    }
+
+    hideCart() {
+        cartOverlay.classList.remove('transparentBcg');
+        cartDOM.classList.remove('showCart');
     }
 }
 
