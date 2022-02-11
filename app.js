@@ -53,6 +53,7 @@ class UI {
     productsDOM.innerHTML = result;
   }
 
+
   getBagButtons() {
     const buttons = [...document.querySelectorAll(".bag-btn")];
     buttonsDom = buttons;
@@ -102,6 +103,71 @@ class UI {
   getSingleButton(id) {
     return buttonsDom.find(button => button.dataset.id === id);
   }
+    getBagButtons() {
+        const buttons = [...document.querySelectorAll(".bag-btn")];
+        buttonsDom = buttons;
+        buttons.forEach(button => {
+            let id = button.dataset.id;
+            let inCart = cart.find(item => item.id === id);
+            if (inCart) {
+                button.innerText = "In Cart";
+                button.disabled = true
+            }
+            else {
+                button.addEventListener('click', (event) => {
+                    event.target.innerText = "In Cart";
+                    event.target.disabled = true;
+                    //get product from products
+                    let cartItem = { ...Storage.getProduct(id), amount: 1};
+                    // add product to the cart
+                    cart = [...cart, cartItem];
+                    // save cart in local storage
+                    Storage.saveCart(cart);
+                    // set cart values
+                    this.saveCartValues(cart);
+                    // display cart item
+                    // show the cart
+                })
+            }
+        });
+    }
+
+    setCartValues(cart) {
+        let tempTotal = 0;
+        let itemsTotal = 0;
+        cart.map(item => {
+            tempTotal += item.price * item.amount;
+            itemsTotal =+ item.amount;
+        })
+        cartTotal.innerText = parseFloat(tempTotal.toFixed(2));
+        cartItems.innerText  =itemsTotal;
+    }
+
+    populateCart(cart) {
+        for (var i = 0; i < cart.length; i++) {
+            this.addCartitem(cart[i]);
+        }
+    }
+
+    setupAPP() {
+        cart = Storage.getCart();
+        this.setCartValues(cart);
+        this.populateCart(cart);
+        cartBtn.addEventListener('click', this.showCart);
+        closeCartBtn.addEventListener('click', this.hideCart);
+    }
+
+    showCart() {
+        cartOverlay.classList.add('transparentBcg');
+        cartDOM.classList.add('showCart');
+
+    }
+
+    hideCart() {
+        cartOverlay.classList.remove('transparentBcg');
+        cartDOM.classList.remove('showCart');
+    }
+
 }
 
 
@@ -132,3 +198,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   });
 });
+
+
+
+// 全削除
+function clearCart(){
+    let cartItems = cart.map(item =>id);
+    cartItems.forEach(id => this.removeIem(id));
+}
+function cartLogic(){
+    clearCartBtn.addEventListener("click",()=>{
+        this.clearCart();
+    })
+}
