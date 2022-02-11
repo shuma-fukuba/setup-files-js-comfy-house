@@ -143,3 +143,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }).then(() => {
     });
 });
+
+
+
+// 全削除
+function clearCart(){
+    let cartItems = cart.map(item =>id);
+    cartItems.forEach(id => this.removeIem(id));
+}
+function cartLogic(){
+    clearCartBtn.addEventListener("click",()=>{
+        this.clearCart();
+    })
+}
