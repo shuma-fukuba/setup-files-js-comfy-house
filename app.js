@@ -8,6 +8,7 @@ const cartTotal = document.querySelector(".cart-total");
 const cartContent = document.querySelector(".cart-content");
 const productsDOM = document.querySelector(".products-center");
 
+let btns = document.querySelectorAll('.bag-btn');
 let cart = [];
 let buttonsDom = [];
 
@@ -35,20 +36,20 @@ class Products {
 class UI {
     displayProducts(products) {
         let result = ``;
-        products.forEach(product => {
+        for (var i = 0; i < products.length; i++){
             result += `
             <article class="product">
             <div class="img-container">
-                <img src="${product.image}" alt="product" class="product-img">
-                <button class="bag-btn" data-id="${product.id}">
+                <img src="${products[i].image}" alt="product" class="product-img">
+                <button class="bag-btn" data-id="${products[i].id}">
                 <i class="fas fa-shopping-cart"></i>
                 add to bag
                 </button>
             </div>
-            <h3>${product.title}</h3>
-            <h4>$${product.price}</h4>
+            <h3>${products[i].title}</h3>
+            <h4>$${products[i].price}</h4>
         </article>`;
-        });
+        }
         productsDOM.innerHTML = result;
     }
     getBagButtons() { 
@@ -82,6 +83,13 @@ class Storage {
     static saveProducts(products) {
         localStorage.setItem("products", JSON.stringify(products));
     }
+
+    static getProduct(id) {
+        // TODO
+    }
+    static saveCart(cart) {
+        // TODO
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -90,6 +98,17 @@ document.addEventListener('DOMContentLoaded', () => {
     products.getProducts().then(products => {
         ui.displayProducts(products);
         Storage.saveProducts(products);
+    }).then(() => {
     });
-    ;
 });
+
+function setCartValues(cart) {
+    let tempTotal = 0;
+    let itemsTotal = 0;
+    cart.map(item => {
+        tempTotal += item.price * item.amount;
+        itemsTotal =+ item.amount;
+    })
+    cartTotal.innerText = parseFloat(tempTotal.toFixed(2));
+    cartItems.innerText  =itemsTotal;
+}
