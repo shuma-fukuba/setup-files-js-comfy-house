@@ -91,7 +91,10 @@ class UI {
 
     clearCart() {
         let cartItems = cart.map(item => item.id);
-        cartItems.forEach(id => this.removeItem(id))
+        cartItems.forEach(id => this.removeItem(id));
+        while (cartContent.children.length > 0) {
+            cartContent.removeChild(cartContent.children[0]);
+        }
     }
 
     removeItem(id) {
@@ -128,9 +131,11 @@ class UI {
                     // save cart in local storage
                     Storage.saveCart(cart);
                     // set cart values
-                    this.saveCartValues(cart);
+                    this.setCartValues(cart);
                     // display cart item
+                    this.addCartItem(cartItem);
                     // show the cart
+                    this.showCart();
                 })
             }
         });
@@ -187,6 +192,12 @@ class UI {
         cartDOM.classList.remove('showCart');
     }
 
+    cartLogic() {
+        clearCartBtn.addEventListener("click", () => {
+            this.clearCart();
+        })
+    }
+
 }
 
 
@@ -207,6 +218,8 @@ class Storage {
         return localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : [];
     }
 }
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const ui = new UI();
     const products = new Products();
@@ -214,19 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ui.displayProducts(products);
         Storage.saveProducts(products);
     }).then(() => {
-
+        ui.getBagButtons();
+        ui.cartLogic();
     });
 });
-
-
-
-// 全削除
-function clearCart() {
-    let cartItems = cart.map(item => id);
-    cartItems.forEach(id => this.removeIem(id));
-}
-function cartLogic() {
-    clearCartBtn.addEventListener("click", () => {
-        this.clearCart();
-    })
-}
