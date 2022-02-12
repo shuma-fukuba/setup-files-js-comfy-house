@@ -53,31 +53,6 @@ class UI {
         productsDOM.innerHTML = result;
     }
 
-
-    getBagButtons() {
-        const buttons = [...document.querySelectorAll(".bag-btn")];
-        buttonsDom = buttons;
-        buttons.forEach(button => {
-            let id = button.dataset.id;
-            let inCart = cart.find(item => item.id === id);
-            if (inCart) {
-                button.innerText = "In Cart";
-                button.disabled = true
-            }
-            else {
-                button.addEventListener('click', (event) => {
-                    event.target.innerText = "In Cart";
-                    event.target.disabled = true;
-                    //get product from products
-                    // add product to the cart
-                    // save cart in local storage
-                    // set cart values
-                    // display cart item
-                    // show the cart
-                })
-            }
-        });
-    }
     setCartValues(cart) {
         let tempTotal = 0;
         let itemsTotal = 0;
@@ -195,6 +170,40 @@ class UI {
     cartLogic() {
         clearCartBtn.addEventListener("click", () => {
             this.clearCart();
+        });
+        cartContent.addEventListener("click", event => {
+            if (event.target.classList.contains('remove-item')) {
+                let removeItem = event.target;
+                let id = removeItem.dataset.id;
+                cartContent.removeChild(removeItem.parentElement.parentElement);
+                this.removeItem(id);
+            } else if (event.target.classList.contains('fa-chevro-up')) {
+                let addAmount = event.target;
+                let id = addAmount.dataset.id;
+                let tempItem = cart.find(item => item.id === id);
+                tempItem.amount++;
+                Storage.saveCart(cart);
+                this.setCartValues(cart);
+                addAmount.nextElementSibling.innerText = tempItem.amount;
+
+            } else if (event.target.classList.contains('fa-chevro-down')) {
+                let lowerAmount = event.target;
+                let id = lowerAmount.dataset.id;
+                let tempItem = cart.find(item => item.id === id);
+                tempItem.amount--;
+                if (tempItem.amout > 0) {
+                    Storage.saveCart(cart);
+                    this.setCartValues(cart);
+                    lowerAmount.previousElementSibling.innerText = tempItem.amount;
+                } else {
+                    cartContent.removeChild(lowerAmount.parentElement.parentElement);
+                    this.removeItem(id);
+                }
+                Storage.saveCart(cart);
+                this.setCartValues(cart);
+                addAmount.nextElementSibling.innerText = tempItem.amount;
+
+            }
         })
     }
 
